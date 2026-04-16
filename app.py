@@ -5,6 +5,7 @@ import random
 # Konfiguration der Pfade (relativ zum Skript-Verzeichnis)
 HUMAN_DIR = "img/real"
 KI_DIR = "img/ki"
+NUM_IMAGES = 5
 
 def main():
     st.set_page_config(
@@ -43,8 +44,8 @@ def main():
                 "ki_on_left": ki_on_left
             })
 
-        random.shuffle(pairs) # Reihenfolge der Fragen mischen
-        st.session_state.quiz_data = pairs
+        random.shuffle(pairs)
+        st.session_state.quiz_data = pairs[:NUM_IMAGES]
         st.session_state.current_idx = 0
         st.session_state.score = 0
         st.session_state.finished = False
