@@ -1,10 +1,8 @@
 import streamlit as st
 import os
 import random
-import mysql.connector
-from datetime import datetime
 
-# Konfiguration der Pfade (relativ zum Skript-Verzeichnis)
+
 HUMAN_DIR = "img/real"
 KI_DIR = "img/ki"
 NUM_IMAGES = 5
@@ -103,7 +101,7 @@ def main():
 
         if st.button("Quiz neu starten"):
             del st.session_state.quiz_data
-            del st.session_state.quiz_results # Auch die Ergebnisse löschen
+            del st.session_state.quiz_results
             st.rerun()
         return
 
