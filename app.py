@@ -6,6 +6,8 @@ import random
 HUMAN_DIR = "img/real"
 KI_DIR = "img/ki"
 NUM_IMAGES = 5
+HUMAN_TEXT = "Dieses Bild war eine echte Aufnahme."
+KI_TEST = "**Dieses Bild wurde von einem Chatbot generiert.**"
 
 def main():
     st.set_page_config(
@@ -68,7 +70,6 @@ def main():
         if incorrect_answers:
             st.subheader("Diese Bilder hast du diesmal nicht richtig erkannt:")
             for i, result in enumerate(incorrect_answers):
-                st.markdown(f"--- **Frage {result['question_number']}** ---")
 
                 col_err1, col_err2 = st.columns(2)
 
@@ -87,21 +88,21 @@ def main():
                 with col_err1:
                     st.image(displayed_left_img, use_container_width=True)
                     if displayed_left_img == actual_ki_img:
-                        st.markdown("**Dieses Bild war von einer KI.**")
+                        st.markdown(KI_TEST)
                     else:
-                        st.markdown("Dieses Bild war von einem Menschen.")
+                        st.markdown(HUMAN_TEXT)
 
                 with col_err2:
                     st.image(displayed_right_img, use_container_width=True)
                     if displayed_right_img == actual_ki_img:
-                        st.markdown("**Dieses Bild war von einer KI.**")
+                        st.markdown(KI_TEST)
                     else:
-                        st.markdown("Dieses Bild war von einem Menschen.")
+                        st.markdown(HUMAN_TEXT)
 
                 if result['user_chose_left_as_ki']:
-                    st.markdown("Du hast das **linke** Bild als KI gewählt.")
+                    st.markdown("Du hast das **linke** Bild gewählt.")
                 else:
-                    st.markdown("Du hast das **rechte** Bild als KI gewählt.")
+                    st.markdown("Du hast das **rechte** Bild gewählt.")
                 st.markdown("---")
 
         return
