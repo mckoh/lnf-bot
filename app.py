@@ -85,14 +85,14 @@ def main():
                     displayed_right_img = actual_ki_img
 
                 with col_err1:
-                    st.image(displayed_left_img, width=300, use_container_width=True)
+                    st.image(displayed_left_img, width=300)
                     if displayed_left_img == actual_ki_img:
                         st.markdown("**Dieses Bild war von einer KI.**")
                     else:
                         st.markdown("Dieses Bild war von einem Menschen.")
 
                 with col_err2:
-                    st.image(displayed_right_img, width=300, use_container_width=True)
+                    st.image(displayed_right_img, width=300)
                     if displayed_right_img == actual_ki_img:
                         st.markdown("**Dieses Bild war von einer KI.**")
                     else:
