@@ -17,7 +17,7 @@ def main():
     )
 
     st.title("Was ist echt, was ist fake?")
-    st.write("Erkennst du den Unterschied? Wähle das Bild aus, das deiner Meinung nach von einer **KI** generiert wurde.")
+    st.markdown("Erkennst du den Unterschied? Wähle das Bild aus, das deiner Meinung nach von einer **KI** generiert wurde.")
 
     # 1. Überprüfung der Ordnerstruktur
     if not os.path.exists(HUMAN_DIR) or not os.path.exists(KI_DIR):
