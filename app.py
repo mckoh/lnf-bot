@@ -13,10 +13,10 @@ def save_results_to_db(score, total, quiz_data):
     """Speichert das Ergebnis in der World4You MySQL Datenbank."""
     try:
         conn = mysql.connector.connect(
-            host=st.secrets["db_host"],
-            database=st.secrets["db_name"],
-            user=st.secrets["db_user"],
-            password=st.secrets["db_password"]
+            host=st.secrets["database"]["db_host"],
+            database=st.secrets["database"]["db_name"],
+            user=st.secrets["database"]["db_user"],
+            password=st.secrets["database"]["db_password"]
         )
         cursor = conn.cursor()
 
