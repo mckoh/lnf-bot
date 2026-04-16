@@ -16,7 +16,7 @@ def main():
         layout="wide"
     )
 
-    st.title("Was ist echt 🏞️, was ist fake 🤖?")
+    st.title("Was ist echt, was ist fake?")
     st.write("Erkennst du den Unterschied? Wähle das Bild aus, das deiner Meinung nach von einer **KI** generiert wurde.")
 
     # 1. Überprüfung der Ordnerstruktur
