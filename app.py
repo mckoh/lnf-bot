@@ -13,7 +13,7 @@ def main():
     st.set_page_config(
         page_title="LNF 2026: Mensch vs. KI",
         page_icon="🤖",
-        layout="wide"
+        layout="centred"
     )
 
     st.title("Was ist echt, was ist fake?")
