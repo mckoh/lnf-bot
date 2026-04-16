@@ -58,10 +58,15 @@ def main():
 
         st.metric("Dein Score", f"{st.session_state.score} von {len(st.session_state.quiz_data)} richtig erkannt")
 
+        if st.button("Quiz neu starten"):
+            del st.session_state.quiz_data
+            del st.session_state.quiz_results
+            st.rerun()
+
         incorrect_answers = [res for res in st.session_state.quiz_results if not res['is_correct']]
 
         if incorrect_answers:
-            st.subheader("Bilder, die du falsch zugeordnet hast:")
+            st.subheader("Diese Bilder hast du diesmal nicht richtig erkannt:")
             for i, result in enumerate(incorrect_answers):
                 st.markdown(f"--- **Frage {result['question_number']}** ---")
 
@@ -80,14 +85,14 @@ def main():
                     displayed_right_img = actual_ki_img
 
                 with col_err1:
-                    st.image(displayed_left_img, use_container_width=True)
+                    st.image(displayed_left_img, width=300, use_container_width=True)
                     if displayed_left_img == actual_ki_img:
                         st.markdown("**Dieses Bild war von einer KI.**")
                     else:
                         st.markdown("Dieses Bild war von einem Menschen.")
 
                 with col_err2:
-                    st.image(displayed_right_img, use_container_width=True)
+                    st.image(displayed_right_img, width=300, use_container_width=True)
                     if displayed_right_img == actual_ki_img:
                         st.markdown("**Dieses Bild war von einer KI.**")
                     else:
@@ -99,10 +104,6 @@ def main():
                     st.markdown("Du hast das **rechte** Bild als KI gewählt.")
                 st.markdown("---")
 
-        if st.button("Quiz neu starten"):
-            del st.session_state.quiz_data
-            del st.session_state.quiz_results
-            st.rerun()
         return
 
     # 4. Quiz-Loop
