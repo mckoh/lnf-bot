@@ -1,11 +1,36 @@
 import streamlit as st
 import os
 import random
+import mysql.connector
+from datetime import datetime
 
 # Konfiguration der Pfade (relativ zum Skript-Verzeichnis)
 HUMAN_DIR = "img/real"
 KI_DIR = "img/ki"
 NUM_IMAGES = 5
+
+def save_results_to_db(score, total, quiz_data):
+    """Speichert das Ergebnis in der World4You MySQL Datenbank."""
+    try:
+        conn = mysql.connector.connect(
+            host=st.secrets["db_host"],
+            database=st.secrets["db_name"],
+            user=st.secrets["db_user"],
+            password=st.secrets["db_password"]
+        )
+        cursor = conn.cursor()
+
+        # Vorbereiten der Bildliste als String
+        images_log = "; ".join([f"H:{p['human']}|K:{p['ki']}" for p in quiz_data])
+
+        query = "INSERT INTO quiz_results (score, total, images_shown, timestamp) VALUES (%s, %s, %s, %s)"
+        cursor.execute(query, (score, total, images_log, datetime.now()))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        st.error(f"Datenbankfehler: {e}")
 
 def main():
     st.set_page_config(
@@ -49,11 +74,17 @@ def main():
         st.session_state.current_idx = 0
         st.session_state.score = 0
         st.session_state.finished = False
+        st.session_state.data_saved = False
 
     # 3. Anzeige der Auswertung am Ende
     if st.session_state.finished:
         st.balloons()
         st.header("Quiz beendet!")
+
+        if not st.session_state.data_saved:
+            save_results_to_db(st.session_state.score, len(st.session_state.quiz_data), st.session_state.quiz_data)
+            st.session_state.data_saved = True
+
         st.metric("Dein Score", f"{st.session_state.score} von {len(st.session_state.quiz_data)} richtig erkannt")
 
         if st.button("Quiz neu starten"):
