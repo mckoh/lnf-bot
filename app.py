@@ -34,7 +34,11 @@ def main():
         ki_files = sorted([f for f in os.listdir(KI_DIR) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))])
 
         # Wir bilden Paare basierend auf der kleinsten gemeinsamen Anzahl an Bildern
-        num_pairs = min(len(human_files), len(ki_files))
+        if len(human_files) != len(ki_files):
+            st.warning("Ungleich viele Bilder im ki- und real-Ordner")
+            return
+
+        num_pairs = len(human_files)
 
         if num_pairs == 0:
             st.warning("Keine Bilder in den Ordnern gefunden. Bitte lade Bilder hoch.")
