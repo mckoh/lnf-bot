@@ -30,8 +30,8 @@ def main():
 
     # 2. Quiz-Daten initialisieren (nur beim ersten Start)
     if 'quiz_data' not in st.session_state:
-        human_files = sorted([f for f in os.listdir(HUMAN_DIR) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))])
-        ki_files = sorted([f for f in os.listdir(KI_DIR) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))])
+        human_files = sorted([f for f in os.listdir(HUMAN_DIR) if f.lower().endswith(('.png'))])
+        ki_files = sorted([f for f in os.listdir(KI_DIR) if f.lower().endswith(('.png'))])
 
         # Wir bilden Paare basierend auf der kleinsten gemeinsamen Anzahl an Bildern
         if len(human_files) != len(ki_files):
