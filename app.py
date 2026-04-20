@@ -6,8 +6,12 @@ import random
 HUMAN_DIR = "img/real"
 KI_DIR = "img/ki"
 NUM_IMAGES = 5
-HUMAN_TEXT = "Dieses Bild war eine echte Aufnahme."
-KI_TEST = "**Dieses Bild wurde von einem Chatbot generiert.**"
+HUMAN_TEXT = "### Echte Aufnahme"
+KI_TEST = "### KI Bild"
+
+with open("explanations.txt", "r", encoding="utf-8") as file:
+    explanations = file.readlines()
+
 
 def main():
     st.set_page_config(
@@ -17,7 +21,7 @@ def main():
     )
 
     st.title("Was ist echt, was ist fake?")
-    st.markdown("Erkennst du den Unterschied? Wähle das Bild aus, das deiner Meinung nach von einer **KI** generiert wurde.")
+    st.markdown("Erkennst du den Unterschied? Wähle das Bild aus, das deiner Meinung nach von einer **KI** generiert wurde. Klicke dazu auf den Button unterhalb des jeweiligen Bildes.")
 
     # 1. Überprüfung der Ordnerstruktur
     if not os.path.exists(HUMAN_DIR) or not os.path.exists(KI_DIR):
@@ -41,6 +45,7 @@ def main():
             # Zufällig entscheiden, ob das KI-Bild links oder rechts erscheint
             ki_on_left = random.choice([True, False])
             pairs.append({
+                "index": i,
                 "human": os.path.join(HUMAN_DIR, human_files[i]),
                 "ki": os.path.join(KI_DIR, ki_files[i]),
                 "ki_on_left": ki_on_left
@@ -51,14 +56,13 @@ def main():
         st.session_state.current_idx = 0
         st.session_state.score = 0
         st.session_state.finished = False
-        st.session_state.quiz_results = [] # Speichert die Ergebnisse jeder Frage
+        st.session_state.quiz_results = []
 
     # 3. Anzeige der Auswertung am Ende
     if st.session_state.finished:
         st.balloons()
-        st.header("Quiz beendet!")
 
-        st.metric("Dein Score", f"{st.session_state.score} von {len(st.session_state.quiz_data)} richtig erkannt")
+        st.markdown(f"## Quiz beendet mit **{st.session_state.score} von {len(st.session_state.quiz_data)}** richtig erkannten Bilder")
 
         if st.button("Quiz neu starten"):
             del st.session_state.quiz_data
@@ -68,7 +72,7 @@ def main():
         incorrect_answers = [res for res in st.session_state.quiz_results if not res['is_correct']]
 
         if incorrect_answers:
-            st.subheader("Diese Bilder hast du diesmal nicht richtig erkannt:")
+            st.markdown("## Bilder bei denen du falsch lagst")
             for i, result in enumerate(incorrect_answers):
 
                 col_err1, col_err2 = st.columns(2)
@@ -86,23 +90,23 @@ def main():
                     displayed_right_img = actual_ki_img
 
                 with col_err1:
-                    st.image(displayed_left_img, use_container_width=True)
                     if displayed_left_img == actual_ki_img:
                         st.markdown(KI_TEST)
                     else:
                         st.markdown(HUMAN_TEXT)
+                    st.image(displayed_left_img, use_container_width=True)
 
                 with col_err2:
-                    st.image(displayed_right_img, use_container_width=True)
                     if displayed_right_img == actual_ki_img:
                         st.markdown(KI_TEST)
                     else:
                         st.markdown(HUMAN_TEXT)
+                    st.image(displayed_right_img, use_container_width=True)
 
                 if result['user_chose_left_as_ki']:
-                    st.markdown("Du hast das **linke** Bild gewählt.")
+                    st.markdown("Du hast das **linke** Bild gewählt. Worauf du hier achten könntest: " + explanations[result["index"]])
                 else:
-                    st.markdown("Du hast das **rechte** Bild gewählt.")
+                    st.markdown("Du hast das **rechte** Bild gewählt. Worauf du hier achten könntest: " + explanations[result["index"]])
                 st.markdown("---")
 
         return
@@ -145,7 +149,8 @@ def check_answer(user_chose_left_as_ki, correct_ki_is_on_left):
         "ki_img": current_pair['ki'],
         "ki_on_left_for_display": current_pair['ki_on_left'], # Wie es dem Benutzer angezeigt wurde
         "user_chose_left_as_ki": user_chose_left_as_ki, # Was der Benutzer gewählt hat
-        "is_correct": is_correct
+        "is_correct": is_correct,
+        "index": current_pair["index"]
     })
 
     if st.session_state.current_idx + 1 < len(st.session_state.quiz_data):
