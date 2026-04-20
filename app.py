@@ -88,7 +88,7 @@ def main():
                     st.markdown(KI_TEST)
                     st.image(result['ki_img'])
 
-                st.markdown("Du hattest das **reale Bild** für das KI-Bild gehalten. Woran du hier das KI-Bild erkennen hättest können: " + explanations[result["index"]])
+                st.markdown("Du hattest das reale Bild für das KI-Bild gehalten. **Woran du hier das KI-Bild erkennen hättest können:** " + explanations[result["index"]])
 
                 st.markdown("---")
 
