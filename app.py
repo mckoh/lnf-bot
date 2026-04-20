@@ -60,8 +60,8 @@ def main():
 
     # 3. Anzeige der Auswertung am Ende
     if st.session_state.finished:
-        st.balloons()
 
+        st.balloons()
         st.markdown(f"## Quiz beendet mit **{st.session_state.score} von {len(st.session_state.quiz_data)}** richtig erkannten Bilder")
 
         if st.button("Quiz neu starten"):
@@ -72,41 +72,24 @@ def main():
         incorrect_answers = [res for res in st.session_state.quiz_results if not res['is_correct']]
 
         if incorrect_answers:
+
             st.markdown("## Bilder bei denen du falsch lagst")
             for i, result in enumerate(incorrect_answers):
 
                 col_err1, col_err2 = st.columns(2)
-
-                # Bestimmen, welches Bild tatsächlich KI war und welches Mensch
                 actual_ki_img = result['ki_img']
                 actual_human_img = result['human_img']
 
-                # Bestimmen, wie die Bilder angezeigt wurden
-                if result['ki_on_left_for_display']:
-                    displayed_left_img = actual_ki_img
-                    displayed_right_img = actual_human_img
-                else:
-                    displayed_left_img = actual_human_img
-                    displayed_right_img = actual_ki_img
-
                 with col_err1:
-                    if displayed_left_img == actual_ki_img:
-                        st.markdown(KI_TEST)
-                    else:
-                        st.markdown(HUMAN_TEXT)
-                    st.image(displayed_left_img, use_container_width=True)
+                    st.markdown(HUMAN_TEXT)
+                    st.image(result['human_img'])
 
                 with col_err2:
-                    if displayed_right_img == actual_ki_img:
-                        st.markdown(KI_TEST)
-                    else:
-                        st.markdown(HUMAN_TEXT)
-                    st.image(displayed_right_img, use_container_width=True)
+                    st.markdown(KI_TEST)
+                    st.image(result['ki_img'])
 
-                if result['user_chose_left_as_ki']:
-                    st.markdown("Du hast das **linke** Bild gewählt. Worauf du hier achten könntest: " + explanations[result["index"]])
-                else:
-                    st.markdown("Du hast das **rechte** Bild gewählt. Worauf du hier achten könntest: " + explanations[result["index"]])
+                st.markdown("Du hattest das **reale Bild** für das KI-Bild gehalten. Woran du hier das KI-Bild erkennen hättest können: " + explanations[result["index"]])
+
                 st.markdown("---")
 
         return
