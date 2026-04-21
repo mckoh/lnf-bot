@@ -47,6 +47,7 @@ def main():
             st.warning("Keine Bilder in den Ordnern gefunden. Bitte lade Bilder hoch.")
             return
 
+        asked = []
         pairs = []
         for i in range(num_pairs):
             # Zufällig entscheiden, ob das KI-Bild links oder rechts erscheint
@@ -77,8 +78,9 @@ def main():
             st.rerun()
 
         incorrect_answers = [res for res in st.session_state.quiz_results if not res['is_correct']]
+        ansked_questions = [img["index"] for img in st.session_state.quiz_data]
 
-        st.write(pairs)
+        st.write(ansked_questions)
         st.write(incorrect_answers)
 
         store_results("[1,2,3]", "[1]", "0.4")
