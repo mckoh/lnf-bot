@@ -5,6 +5,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 from pandas import DataFrame, concat
 from datetime import datetime as dt
+from gspread_dataframe import set_with_dataframe
 
 
 HUMAN_DIR = "img/real"
@@ -180,7 +181,7 @@ def store_results(asked, incorrect, score):
     new = DataFrame({"Timestamp": [dt.now().strftime("%Y-%m-%d %H:%M:%S")], "img_received": [asked], "img_incorrect": [incorrect], "score": [score]})
     data = concat([data, new], ignore_index=True)
 
-    worksheet.update(data)
+    set_with_dataframe(worksheet, data)
 
 if __name__ == "__main__":
     main()

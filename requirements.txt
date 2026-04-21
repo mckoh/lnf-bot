@@ -4,3 +4,4 @@ jupyter
 mysql-connector-python
 gspread
 google-auth
+gspread-dataframe
