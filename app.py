@@ -175,7 +175,7 @@ def store_results(asked, incorrect, score):
     data.columns = data.iloc[0]
     data.drop(0, axis=0, inplace=True)
 
-    new = DataFrame({"Timestamp": [dt.now().strftime("%Y-%m-%d %H:%M:%S")], "img_received": [asked], "img_incorrect": [incorrect], "score": [score]})
+    new = DataFrame({"timestamp": [dt.now().strftime("%Y-%m-%d %H:%M:%S")], "img_received": [asked], "img_incorrect": [incorrect], "incorrect_score": [score]})
     data = concat([data, new], ignore_index=True)
 
     set_with_dataframe(worksheet, data)
