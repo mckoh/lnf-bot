@@ -3,7 +3,7 @@ import os
 import random
 import gspread
 from google.oauth2.service_account import Credentials
-
+from pandas import DataFrame
 
 
 HUMAN_DIR = "img/real"
@@ -78,6 +78,9 @@ def main():
 
         incorrect_answers = [res for res in st.session_state.quiz_results if not res['is_correct']]
 
+        st.write(str(pairs))
+        st.write(str(incorrect_answers))
+
         store_results("[1,2,3]", "[1]", "0.4")
 
         if incorrect_answers:
@@ -86,8 +89,6 @@ def main():
             for i, result in enumerate(incorrect_answers):
 
                 col_err1, col_err2 = st.columns(2)
-                actual_ki_img = result['ki_img']
-                actual_human_img = result['human_img']
 
                 with col_err1:
                     st.markdown(HUMAN_TEXT)
@@ -160,8 +161,14 @@ def store_results(img_received, img_correct, score):
 
     client = gspread.authorize(creds)
 
-    sheet = client.open_by_key(st.secrets["google_sheet"]["sheet_id"]).sheet1
-    sheet.update_cell(row=1, col=8, value="Test")
+    workbook = client.open_by_key(st.secrets["google_sheet"]["sheet_id"])
+    worksheet = workbook.worksheet("Sheet1")
+
+    # read all data from worksheet
+    data = DataFrame(worksheet.get_all_values())
+    data.columns = data.iloc[0]
+    data.drop(0, axis=0, inplace=True)
+
 
 
 if __name__ == "__main__":
