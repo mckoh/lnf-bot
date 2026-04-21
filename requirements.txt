@@ -2,3 +2,5 @@ matplotlib
 streamlit
 jupyter
 mysql-connector-python
+gspread
+google-auth

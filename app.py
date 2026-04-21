@@ -1,6 +1,9 @@
 import streamlit as st
 import os
 import random
+import gspread
+from google.oauth2.service_account import Credentials
+
 
 
 HUMAN_DIR = "img/real"
@@ -75,6 +78,8 @@ def main():
 
         incorrect_answers = [res for res in st.session_state.quiz_results if not res['is_correct']]
 
+        store_results("[1,2,3]", "[1]", "0.4")
+
         if incorrect_answers:
 
             st.markdown("## Bilder bei denen du falsch lagst")
@@ -145,6 +150,19 @@ def check_answer(user_chose_left_as_ki, correct_ki_is_on_left):
     else:
         st.session_state.finished = True
     st.rerun()
+
+def store_results(img_received, img_correct, score):
+    creds = Credentials.from_service_account_info(
+
+    st.secrets["gcp_service_account"],
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    )
+
+    client = gspread.authorize(creds)
+
+    sheet = client.open_by_key(st.secrets["google_sheet"]["sheet_id"]).sheet1
+    sheet.update_cell(row=1, col=8, value="Test")
+
 
 if __name__ == "__main__":
     main()
