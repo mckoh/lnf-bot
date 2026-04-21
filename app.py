@@ -78,12 +78,17 @@ def main():
             st.rerun()
 
         incorrect_answers = [res for res in st.session_state.quiz_results if not res['is_correct']]
-        ansked_questions = [img["index"] for img in st.session_state.quiz_data]
+        asked_indexes = [img["index"] for img in st.session_state.quiz_data]
+        incorrect_indexes = [img["index"] for img in incorrect_answers]
 
-        st.write(ansked_questions)
-        st.write(incorrect_answers)
+        st.write(asked_indexes)
+        st.write(incorrect_indexes)
 
-        store_results("[1,2,3]", "[1]", "0.4")
+        store_results(
+            ",".join(asked_indexes),
+            ",".join(incorrect_indexes),
+            str(len(incorrect_answers)/len(asked_indexes))
+        )
 
         if incorrect_answers:
 
