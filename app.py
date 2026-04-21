@@ -83,9 +83,6 @@ def main():
         asked_indexes = [img["index"] for img in st.session_state.quiz_data]
         incorrect_indexes = [img["index"] for img in incorrect_answers]
 
-        st.write(",".join([str(v) for v in asked_indexes]))
-        st.write(",".join([str(v) for v in incorrect_indexes]))
-
         store_results(
             ",".join([str(v) for v in asked_indexes]),
             ",".join([str(v) for v in incorrect_indexes]),
