@@ -3,7 +3,8 @@ import os
 import random
 import gspread
 from google.oauth2.service_account import Credentials
-from pandas import DataFrame
+from pandas import DataFrame, concat
+from datetime import datetime as dt
 
 
 HUMAN_DIR = "img/real"
@@ -81,12 +82,9 @@ def main():
         asked_indexes = [img["index"] for img in st.session_state.quiz_data]
         incorrect_indexes = [img["index"] for img in incorrect_answers]
 
-        st.write(",".join(asked_indexes))
-        st.write(",".join(incorrect_indexes))
-
         store_results(
-            ",".join(asked_indexes),
-            ",".join(incorrect_indexes),
+            ",".join([str(v) for v in asked_indexes]),
+            ",".join([str(v) for v in incorrect_indexes]),
             str(len(incorrect_indexes)/len(asked_indexes))
         )
 
@@ -159,7 +157,7 @@ def check_answer(user_chose_left_as_ki, correct_ki_is_on_left):
         st.session_state.finished = True
     st.rerun()
 
-def store_results(img_received, img_correct, score):
+def store_results(asked, incorrect, score):
     creds = Credentials.from_service_account_info(
 
     st.secrets["gcp_service_account"],
@@ -176,7 +174,10 @@ def store_results(img_received, img_correct, score):
     data.columns = data.iloc[0]
     data.drop(0, axis=0, inplace=True)
 
+    new = DataFrame({"Timestamp": [dt.now().strftime("%Y-%m-%d %H:%M:%S")], "img_received": [asked], "img_incorrect": [incorrect], "score": [score]})
+    data = concat([data, new], ignore_index=True)
 
+    worksheet.update(data)
 
 if __name__ == "__main__":
     main()
