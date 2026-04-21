@@ -78,8 +78,8 @@ def main():
 
         incorrect_answers = [res for res in st.session_state.quiz_results if not res['is_correct']]
 
-        st.write(str(pairs))
-        st.write(str(incorrect_answers))
+        st.write(pairs)
+        st.write(incorrect_answers)
 
         store_results("[1,2,3]", "[1]", "0.4")
 
