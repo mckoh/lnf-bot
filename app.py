@@ -87,7 +87,7 @@ def main():
         store_results(
             ",".join(asked_indexes),
             ",".join(incorrect_indexes),
-            str(len(incorrect_answers)/len(asked_indexes))
+            str(len(incorrect_indexes)/len(asked_indexes))
         )
 
         if incorrect_answers:
